@@ -21,6 +21,41 @@ module.exports = {
             {
                 test: /\.less$/,
                 use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader']
+            },
+            {
+                test: /\.(png|jpg|gif|ico|svg)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name(file) {
+                                if (process.env.NODE_ENV === 'development') {
+                                    return '[path][name].[ext]';
+                                }
+
+                                return '[hash].[ext]';
+                            },
+                        },
+                    },
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            mozjpeg: {
+                                progressive: true,
+                                quality: 70
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'fonts/[name][hash].[ext]'
+                    }
+                }
             }
         ]
     },
